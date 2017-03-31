@@ -9,7 +9,9 @@ java -cp 'jar-file' dazzle.console.Main 'oldVersionJarFilePath' 'currentVersionJ
 
 ## Examples
 `java -cp 'jar-file' dazzle.console.Main --old src/test/resources/teetime-1.0-jar --current src/test/resources/teetime-2.0-jar --include teetime/framework`
+
 "--include teetime/framework" means "search for invalid changes within the package teetime.framework"
 
 `java -cp 'jar-file' dazzle.console.Main --old src/test/resources/teetime-1.0-jar --current src/test/resources/teetime-2.0-jar`
+
 If you skip the "include" parameter, all packages are included.
