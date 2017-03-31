@@ -1,37 +1,33 @@
 package dazzle.console;
 
 import java.io.IOException;
-import java.net.*;
-import java.nio.file.Paths;
-import java.util.*;
+import java.util.List;
+
+import com.beust.jcommander.JCommander;
 
 import dazzle.compare.*;
 
 public class Main {
 
 	public static void main(String[] args) throws IOException {
-		URL oldVersionJar = toURL(args[0]);
-		URL currentVersionJar = toURL(args[1]);
-		// TODO consider includes and excludes
-		Set<String> packageNames = toSet(args[2]);
+		int exitCode = mainWithoutExitCall(args);
 
-		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(packageNames);
-		List<InvalidChange> invalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar, currentVersionJar);
+		System.exit(exitCode);
+	}
+
+	static int mainWithoutExitCall(String[] args) throws IOException {
+		CommandLineArgsContainer container = new CommandLineArgsContainer();
+		new JCommander(container).parse(args);
+
+		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(container.packageNamesToInclude, container.packageNamesToExclude);
+		List<InvalidChange> invalidChanges = invalidChangeDetector.detectInvalidChanges(container.oldVersionJar, container.currentVersionJar);
 
 		for (InvalidChange invalidChange : invalidChanges) {
 			// TODO consider to use slf4j
 			System.out.println(invalidChange);
 		}
 
-		System.exit(invalidChanges.size());
-	}
-
-	private static Set<String> toSet(String commaSeparatedPackages) {
-		String[] split = commaSeparatedPackages.split(",");
-		return new HashSet<>(Arrays.asList(split));
-	}
-
-	private static URL toURL(String filePath) throws MalformedURLException {
-		return Paths.get(filePath).toUri().toURL();
+		int exitCode = invalidChanges.size();
+		return exitCode;
 	}
 }

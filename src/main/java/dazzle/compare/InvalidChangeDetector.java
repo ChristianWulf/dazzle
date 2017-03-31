@@ -9,13 +9,17 @@ import dazzle.read.*;
 
 public class InvalidChangeDetector {
 
-	public static final String ALL_PACKAGES_WILDCARD = "-a";
-	public static final Set<String> ALLOW_ALL_PACKAGES = new HashSet<>(Arrays.asList(InvalidChangeDetector.ALL_PACKAGES_WILDCARD));
+	public static final Set<String> ALLOW_ALL_PACKAGES = new HashSet<>();
 
-	private final Set<String> packageNames;
+	private final Set<String> packageNamesToInclude;
 
-	public InvalidChangeDetector(Set<String> packageNames) {
-		this.packageNames = packageNames;
+	public InvalidChangeDetector(Set<String> packageNamesToInclude) {
+		this(packageNamesToInclude, Collections.emptySet());
+	}
+
+	public InvalidChangeDetector(Set<String> packageNamesToInclude, Set<String> packageNamesToExclude) {
+		this.packageNamesToInclude = packageNamesToInclude;
+		// TODO implement packageNamesToExclude
 	}
 
 	public List<InvalidChange> detectInvalidChanges(URL oldVersionJar, URL currentVersionJar) throws IOException {
@@ -67,7 +71,7 @@ public class InvalidChangeDetector {
 	private void compareType(List<InvalidChange> invalidChanges, JavaType oldType,
 			Map<String, JavaType> searchRepository) {
 		// skip types outside of the given packages
-		if (!packageNames.contains(ALL_PACKAGES_WILDCARD) && !packageNames.contains(oldType.getPackageName())) {
+		if (!packageNamesToInclude.isEmpty() && !packageNamesToInclude.contains(oldType.getPackageName())) {
 			return;
 		}
 
