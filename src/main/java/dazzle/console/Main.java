@@ -20,9 +20,9 @@ public class Main {
 		new JCommander(container).parse(args);
 
 		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(container.packageNamesToInclude, container.packageNamesToExclude);
-		List<InvalidChange> invalidChanges = invalidChangeDetector.detectInvalidChanges(container.oldVersionJar, container.currentVersionJar);
+		List<InvalidChange<?>> invalidChanges = invalidChangeDetector.detectInvalidChanges(container.oldVersionJar, container.currentVersionJar);
 
-		for (InvalidChange invalidChange : invalidChanges) {
+		for (InvalidChange<?> invalidChange : invalidChanges) {
 			// TODO consider to use slf4j
 			System.out.println(invalidChange);
 		}

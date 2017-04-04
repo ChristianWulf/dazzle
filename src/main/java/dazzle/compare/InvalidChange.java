@@ -1,28 +1,26 @@
 package dazzle.compare;
 
-import dazzle.read.JavaType;
+public class InvalidChange<T> {
 
-public class InvalidChange {
-
-	private final JavaType oldType;
-	private final JavaType currentType;
+	private final T oldType;
+	private final T currentType;
 	private final InvalidChangeType invalidChangeType;
 
 	public static enum InvalidChangeType {
 		TYPE_REMOVED, TYPE_VISIBILITY_CHANGED, FIELD_REMOVED, FIELD_VISIBILITY_CHANGED, FIELD_TYPE_CHANGED, METHOD_REMOVED, METHOD_VISIBILITY_CHANGED, METHOD_RETURNTYPE_CHANGED, METHOD_PARAMETERTYPES_REMOVED
 	}
 
-	public InvalidChange(JavaType oldType, JavaType currentType, InvalidChangeType invalidChangeType) {
-		this.oldType = oldType;
-		this.currentType = currentType;
+	public InvalidChange(T oldElement, T currentElement, InvalidChangeType invalidChangeType) {
+		this.oldType = oldElement;
+		this.currentType = currentElement;
 		this.invalidChangeType = invalidChangeType;
 	}
 
-	public JavaType getOldType() {
+	public T getOldElement() {
 		return oldType;
 	}
 
-	public JavaType getCurrentType() {
+	public T getCurrentElement() {
 		return currentType;
 	}
 

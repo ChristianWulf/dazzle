@@ -17,7 +17,7 @@ public class InvalidChangeDetectorTest {
 
 		Set<String> packageNames = InvalidChangeDetector.ALLOW_ALL_PACKAGES;
 		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(packageNames);
-		List<InvalidChange> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
+		List<InvalidChange<?>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
 				currentVersionJar);
 
 		assertThat(detectInvalidChanges, hasSize(76));
@@ -30,7 +30,7 @@ public class InvalidChangeDetectorTest {
 
 		Set<String> packageNames = InvalidChangeDetector.ALLOW_ALL_PACKAGES;
 		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(packageNames);
-		List<InvalidChange> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
+		List<InvalidChange<?>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
 				currentVersionJar);
 
 		assertThat(detectInvalidChanges, hasSize(12));
@@ -43,7 +43,7 @@ public class InvalidChangeDetectorTest {
 
 		Set<String> packageNames = new HashSet<>(Arrays.asList("teetime/framework"));
 		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(packageNames);
-		List<InvalidChange> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
+		List<InvalidChange<?>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
 				currentVersionJar);
 
 		assertThat(detectInvalidChanges, hasSize(4));

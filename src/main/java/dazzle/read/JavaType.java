@@ -1,7 +1,5 @@
 package dazzle.read;
 
-import org.objectweb.asm.Opcodes;
-
 public class JavaType implements JavaEntity {
 
 	private final int access;
@@ -28,35 +26,35 @@ public class JavaType implements JavaEntity {
 	}
 
 	public boolean isPublic() {
-		return (access & Opcodes.ACC_PUBLIC) == Opcodes.ACC_PUBLIC;
+		return Access.INSTANCE.isPublic(access);
 	}
 
 	public boolean isPackagePrivate() {
-		return !isPublic() && !isProtected() && !isPrivate();
+		return Access.INSTANCE.isPackagePrivate(access);
 	}
 
-	private boolean isProtected() {
-		return (access & Opcodes.ACC_PROTECTED) == Opcodes.ACC_PROTECTED;
+	public boolean isProtected() {
+		return Access.INSTANCE.isProtected(access);
 	}
 
-	private boolean isPrivate() {
-		return (access & Opcodes.ACC_PRIVATE) == Opcodes.ACC_PRIVATE;
+	public boolean isPrivate() {
+		return Access.INSTANCE.isPrivate(access);
 	}
 
 	public boolean isEnum() {
-		return (access & Opcodes.ACC_ENUM) == Opcodes.ACC_ENUM;
+		return Access.INSTANCE.isEnum(access);
 	}
 
 	public boolean isInterface() {
-		return (access & Opcodes.ACC_INTERFACE) == Opcodes.ACC_INTERFACE;
+		return Access.INSTANCE.isInterface(access);
 	}
 
 	public boolean isClass() {
-		return (!isEnum() && !(isInterface()));
+		return Access.INSTANCE.isClass(access);
 	}
 
 	public boolean isDeprecated() {
-		return (access & Opcodes.ACC_DEPRECATED) == Opcodes.ACC_DEPRECATED;
+		return Access.INSTANCE.isDeprecated(access);
 	}
 
 	@Override

@@ -35,4 +35,23 @@ public class JavaField implements JavaEntity {
 		return name;
 	}
 
+	public boolean isPublic() {
+		return Access.INSTANCE.isPublic(access);
+	}
+
+	public boolean isProtected() {
+		return Access.INSTANCE.isProtected(access);
+	}
+
+	public boolean isPrivate() {
+		return Access.INSTANCE.isPrivate(access);
+	}
+
+	@Override
+	public String toString() {
+		String visibility = (isPublic()) ? "public"
+				: (((isPrivate()) ? "private" : (isProtected()) ? "protected" : ""));
+		return String.format("%s %s %s", visibility, typeName, name);
+	}
+
 }
