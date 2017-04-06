@@ -32,7 +32,26 @@ public class JavaMethod implements JavaEntity {
 
 	@Override
 	public String getKey() {
-		return name;
+		return String.format("%s.%s", owningType, name);
+	}
+
+	public boolean isPublic() {
+		return Access.INSTANCE.isPublic(access);
+	}
+
+	private boolean isProtected() {
+		return Access.INSTANCE.isProtected(access);
+	}
+
+	private boolean isPrivate() {
+		return Access.INSTANCE.isPrivate(access);
+	}
+
+	@Override
+	public String toString() {
+		String visibility = (isPublic()) ? "public"
+				: (((isPrivate()) ? "private" : (isProtected()) ? "protected" : ""));
+		return String.format("%s %s %s.%s", visibility, returnTypeName, owningType.getFqn(), name);
 	}
 
 }

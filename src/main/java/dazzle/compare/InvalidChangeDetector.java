@@ -104,7 +104,6 @@ public class InvalidChangeDetector {
 
 	private void compareField(List<InvalidChange<JavaField>> invalidChanges, JavaField oldField,
 			Map<String, JavaField> searchRepository) {
-
 		if (!searchRepository.containsKey(oldField.getKey())) {
 			invalidChanges.add(new InvalidChange<>(oldField, null, InvalidChangeType.FIELD_REMOVED));
 			return;
@@ -123,10 +122,41 @@ public class InvalidChangeDetector {
 	}
 
 	private List<InvalidChange<JavaMethod>> compareMethods(List<JavaMethod> methods,
-			Map<String, JavaMethod> searchRepositoryMethod) {
+			Map<String, JavaMethod> searchRepository) {
 		List<InvalidChange<JavaMethod>> invalidChanges = new ArrayList<>();
-		// TODO Auto-generated method stub
+
+		for (JavaMethod javaMethod : methods) {
+			compareMethod(invalidChanges, javaMethod, searchRepository);
+		}
+
 		return invalidChanges;
+	}
+
+	private void compareMethod(List<InvalidChange<JavaMethod>> invalidChanges, JavaMethod oldMethod,
+			Map<String, JavaMethod> searchRepository) {
+		if (oldMethod.isPublic() && !searchRepository.containsKey(oldMethod.getKey())) {
+			invalidChanges.add(new InvalidChange<>(oldMethod, null, InvalidChangeType.METHOD_REMOVED));
+			return;
+		}
+
+		JavaMethod currentMethod = searchRepository.get(oldMethod.getKey());
+		if (oldMethod.isPublic() && !currentMethod.isPublic()) {
+			invalidChanges
+			.add(new InvalidChange<>(oldMethod, currentMethod, InvalidChangeType.METHOD_VISIBILITY_CHANGED));
+			return;
+		}
+
+		if (oldMethod.isPublic() && !oldMethod.getReturnTypeName().equals(currentMethod.getReturnTypeName())) {
+			invalidChanges
+			.add(new InvalidChange<>(oldMethod, currentMethod, InvalidChangeType.METHOD_RETURNTYPE_CHANGED));
+			return;
+		}
+
+		// if (!oldMethod.getParameterSignature().equals(currentMethod.getParameterSignature())) {
+		// invalidChanges.add(new InvalidChange<>(oldMethod, currentMethod,
+		// InvalidChangeType.METHOD_PARAMETERTYPES_REMOVED));
+		// return;
+		// }
 	}
 
 }
