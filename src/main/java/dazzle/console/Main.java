@@ -19,8 +19,13 @@ public class Main {
 		CommandLineArgsContainer container = new CommandLineArgsContainer();
 		new JCommander(container).parse(args);
 
-		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(container.packageNamesToInclude, container.packageNamesToExclude);
-		List<InvalidChange<?>> invalidChanges = invalidChangeDetector.detectInvalidChanges(container.oldVersionJar, container.currentVersionJar);
+		IncludeSet<String> packageNamesToInclude = new IncludeSet<>(container.packageNamesToInclude);
+		ExcludeSet<String> packageNamesToExclude = new ExcludeSet<>(container.packageNamesToExclude);
+
+		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(packageNamesToInclude,
+				packageNamesToExclude);
+		List<InvalidChange<?>> invalidChanges = invalidChangeDetector.detectInvalidChanges(container.oldVersionJar,
+				container.currentVersionJar);
 
 		for (InvalidChange<?> invalidChange : invalidChanges) {
 			// TODO consider to use slf4j

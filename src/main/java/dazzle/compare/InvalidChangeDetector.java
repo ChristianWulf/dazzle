@@ -4,22 +4,22 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 
-import dazzle.compare.InvalidChange.InvalidChangeType;
 import dazzle.read.*;
 
 public class InvalidChangeDetector {
 
-	public static final Set<String> ALLOW_ALL_PACKAGES = new HashSet<>();
+	public static final IncludeSet<String> ALLOW_ALL_PACKAGES = new IncludeSet<>(Collections.emptySet());
 
-	private final Set<String> packageNamesToInclude;
+	private final IncludeSet<String> packageNamesToInclude;
+	private final ExcludeSet<String> packageNamesToExclude;
 
-	public InvalidChangeDetector(Set<String> packageNamesToInclude) {
-		this(packageNamesToInclude, Collections.emptySet());
+	public InvalidChangeDetector(IncludeSet<String> packageNamesToInclude) {
+		this(packageNamesToInclude, new ExcludeSet<>(Collections.emptySet()));
 	}
 
-	public InvalidChangeDetector(Set<String> packageNamesToInclude, Set<String> packageNamesToExclude) {
+	public InvalidChangeDetector(IncludeSet<String> packageNamesToInclude, ExcludeSet<String> packageNamesToExclude) {
 		this.packageNamesToInclude = packageNamesToInclude;
-		// TODO implement packageNamesToExclude
+		this.packageNamesToExclude = packageNamesToExclude;
 	}
 
 	public List<InvalidChange<?>> detectInvalidChanges(URL oldVersionJar, URL currentVersionJar) throws IOException {
@@ -32,131 +32,34 @@ public class InvalidChangeDetector {
 		urlWalker.visitJar(currentVersionJar);
 
 		Map<String, JavaType> searchRepositoryType = buildSearchIndex(currentVersionVisitor.getTypes());
-		List<InvalidChange<JavaType>> invalidTypeChanges = compareTypes(oldVersionVisitor.getTypes(),
-				searchRepositoryType);
+		InvalidClassDetector invalidClassDetector = new InvalidClassDetector(searchRepositoryType,
+				packageNamesToInclude, packageNamesToExclude);
+		oldVersionVisitor.getTypes().forEach(oldType -> invalidClassDetector.detect(oldType));
 
 		Map<String, JavaField> searchRepositoryField = buildSearchIndex(currentVersionVisitor.getFields());
-		List<InvalidChange<JavaField>> invalidFieldChanges = compareFields(oldVersionVisitor.getFields(),
-				searchRepositoryField);
+		InvalidFieldDetector invalidFieldDetector = new InvalidFieldDetector(searchRepositoryField);
+		oldVersionVisitor.getFields().forEach(oldField -> invalidFieldDetector.detect(oldField));
 
 		Map<String, JavaMethod> searchRepositoryMethod = buildSearchIndex(currentVersionVisitor.getMethods());
-		List<InvalidChange<JavaMethod>> invalidMethodChanges = compareMethods(oldVersionVisitor.getMethods(),
-				searchRepositoryMethod);
+		InvalidMethodDetector invalidMethodDetector = new InvalidMethodDetector(searchRepositoryMethod);
+		oldVersionVisitor.getMethods().forEach(oldMethod -> invalidMethodDetector.detect(oldMethod));
 
 		List<InvalidChange<?>> invalidChanges = new ArrayList<>();
-		invalidChanges.addAll(invalidTypeChanges);
-		invalidChanges.addAll(invalidFieldChanges);
-		invalidChanges.addAll(invalidMethodChanges);
+		invalidChanges.addAll(invalidClassDetector.getInvalidChanges());
+		invalidChanges.addAll(invalidFieldDetector.getInvalidChanges());
+		invalidChanges.addAll(invalidMethodDetector.getInvalidChanges());
 
 		return invalidChanges;
 	}
 
 	private <T extends JavaEntity> Map<String, T> buildSearchIndex(List<T> filteredTypes) {
-		HashMap<String, T> searchRepository = new HashMap<>();
+		Map<String, T> searchRepository = new HashMap<>();
 		for (T filteredType : filteredTypes) {
 			String key = filteredType.getKey();
 			T value = filteredType;
 			searchRepository.put(key, value);
 		}
 		return searchRepository;
-	}
-
-	private List<InvalidChange<JavaType>> compareTypes(List<JavaType> oldVersionTypes,
-			Map<String, JavaType> searchRepository) {
-		List<InvalidChange<JavaType>> invalidChanges = new ArrayList<>();
-
-		for (JavaType oldType : oldVersionTypes) {
-			compareType(invalidChanges, oldType, searchRepository);
-		}
-
-		return invalidChanges;
-	}
-
-	private void compareType(List<InvalidChange<JavaType>> invalidChanges, JavaType oldType,
-			Map<String, JavaType> searchRepository) {
-		// skip types outside of the given packages
-		if (!packageNamesToInclude.isEmpty() && !packageNamesToInclude.contains(oldType.getPackageName())) {
-			return;
-		}
-
-		if (!searchRepository.containsKey(oldType.getFqn())) {
-			invalidChanges.add(new InvalidChange<>(oldType, null, InvalidChangeType.TYPE_REMOVED));
-			return;
-		}
-
-		JavaType currentType = searchRepository.get(oldType.getFqn());
-		if (!currentType.isPublic()) {
-			invalidChanges.add(new InvalidChange<>(oldType, currentType, InvalidChangeType.TYPE_VISIBILITY_CHANGED));
-			return;
-		}
-	}
-
-	private List<InvalidChange<JavaField>> compareFields(List<JavaField> fields,
-			Map<String, JavaField> searchRepositoryField) {
-		List<InvalidChange<JavaField>> invalidChanges = new ArrayList<>();
-
-		for (JavaField javaField : fields) {
-			compareField(invalidChanges, javaField, searchRepositoryField);
-		}
-
-		return invalidChanges;
-	}
-
-	private void compareField(List<InvalidChange<JavaField>> invalidChanges, JavaField oldField,
-			Map<String, JavaField> searchRepository) {
-		if (!searchRepository.containsKey(oldField.getKey())) {
-			invalidChanges.add(new InvalidChange<>(oldField, null, InvalidChangeType.FIELD_REMOVED));
-			return;
-		}
-
-		JavaField currentField = searchRepository.get(oldField.getKey());
-		if (oldField.isPublic() && !currentField.isPublic()) {
-			invalidChanges.add(new InvalidChange<>(oldField, currentField, InvalidChangeType.FIELD_VISIBILITY_CHANGED));
-			return;
-		}
-
-		if (!oldField.getTypeName().equals(currentField.getTypeName())) {
-			invalidChanges.add(new InvalidChange<>(oldField, currentField, InvalidChangeType.FIELD_TYPE_CHANGED));
-			return;
-		}
-	}
-
-	private List<InvalidChange<JavaMethod>> compareMethods(List<JavaMethod> methods,
-			Map<String, JavaMethod> searchRepository) {
-		List<InvalidChange<JavaMethod>> invalidChanges = new ArrayList<>();
-
-		for (JavaMethod javaMethod : methods) {
-			compareMethod(invalidChanges, javaMethod, searchRepository);
-		}
-
-		return invalidChanges;
-	}
-
-	private void compareMethod(List<InvalidChange<JavaMethod>> invalidChanges, JavaMethod oldMethod,
-			Map<String, JavaMethod> searchRepository) {
-		if (oldMethod.isPublic() && !searchRepository.containsKey(oldMethod.getKey())) {
-			invalidChanges.add(new InvalidChange<>(oldMethod, null, InvalidChangeType.METHOD_REMOVED));
-			return;
-		}
-
-		JavaMethod currentMethod = searchRepository.get(oldMethod.getKey());
-		if (oldMethod.isPublic() && !currentMethod.isPublic()) {
-			invalidChanges
-			.add(new InvalidChange<>(oldMethod, currentMethod, InvalidChangeType.METHOD_VISIBILITY_CHANGED));
-			return;
-		}
-
-		if (oldMethod.isPublic() && !oldMethod.getReturnTypeName().equals(currentMethod.getReturnTypeName())) {
-			invalidChanges
-			.add(new InvalidChange<>(oldMethod, currentMethod, InvalidChangeType.METHOD_RETURNTYPE_CHANGED));
-			return;
-		}
-
-		// if (!oldMethod.getParameterSignature().equals(currentMethod.getParameterSignature())) {
-		// invalidChanges.add(new InvalidChange<>(oldMethod, currentMethod,
-		// InvalidChangeType.METHOD_PARAMETERTYPES_REMOVED));
-		// return;
-		// }
 	}
 
 }

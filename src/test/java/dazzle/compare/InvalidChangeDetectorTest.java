@@ -15,7 +15,7 @@ public class InvalidChangeDetectorTest {
 		URL oldVersionJar = InvalidChangeDetectorTest.class.getResource("/teetime-1.0.jar");
 		URL currentVersionJar = InvalidChangeDetectorTest.class.getResource("/teetime-2.0.jar");
 
-		Set<String> packageNames = InvalidChangeDetector.ALLOW_ALL_PACKAGES;
+		IncludeSet<String> packageNames = InvalidChangeDetector.ALLOW_ALL_PACKAGES;
 		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(packageNames);
 		List<InvalidChange<?>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
 				currentVersionJar);
@@ -24,11 +24,11 @@ public class InvalidChangeDetectorTest {
 	}
 
 	@Test
-	public void testShouldDetectInvalidChangesBetweenVersion2_0And2_1WithinAllApackages() throws Exception {
+	public void testShouldDetectInvalidChangesBetweenVersion20And21WithinAllApackages() throws Exception {
 		URL oldVersionJar = InvalidChangeDetectorTest.class.getResource("/teetime-2.0.jar");
 		URL currentVersionJar = InvalidChangeDetectorTest.class.getResource("/teetime-2.1.jar");
 
-		Set<String> packageNames = InvalidChangeDetector.ALLOW_ALL_PACKAGES;
+		IncludeSet<String> packageNames = InvalidChangeDetector.ALLOW_ALL_PACKAGES;
 		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(packageNames);
 		List<InvalidChange<?>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
 				currentVersionJar);
@@ -41,7 +41,7 @@ public class InvalidChangeDetectorTest {
 		URL oldVersionJar = InvalidChangeDetectorTest.class.getResource("/teetime-2.0.jar");
 		URL currentVersionJar = InvalidChangeDetectorTest.class.getResource("/teetime-2.1.jar");
 
-		Set<String> packageNames = new HashSet<>(Arrays.asList("teetime/framework"));
+		IncludeSet<String> packageNames = new IncludeSet<>(Arrays.asList("teetime/framework"));
 		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(packageNames);
 		List<InvalidChange<?>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
 				currentVersionJar);

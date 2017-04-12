@@ -2,7 +2,7 @@ package dazzle.read;
 
 import org.objectweb.asm.Opcodes;
 
-class Access {
+final class Access {
 
 	public final static Access INSTANCE = new Access();
 
