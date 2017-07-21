@@ -9,7 +9,7 @@ After executing "mvn package", you find the jar-file in the "target" folder.
 # General Execution Pattern
 `java -cp 'jar-file' dazzle.console.Main 'oldVersionJarFilePath' 'currentVersionJarFilePath' 'comma separated packageNames'`
 
-The exit code represents the number of invalid changes. So, if no invalid changes were found, the exit code is 0. Otherwise, the exit code is greater than 0. In this way, dazzle can be easily integrated to fail your build process upon invalid changes.
+The exit code represents the number of invalid changes found in the given application. So, if no invalid changes were found, the exit code is 0. Otherwise, the exit code is greater than 0. In this way, dazzle can be easiyl integrated into your build process and fail the build process upon invalid changes.
 
 ### Example Executions
 Search for invalid changes within the package `teetime.framework` by using `--include teetime/framework`:
