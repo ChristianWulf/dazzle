@@ -19,8 +19,8 @@ public class Main {
 		CommandLineArgsContainer container = new CommandLineArgsContainer();
 		new JCommander(container).parse(args);
 
-		IncludeSet<String> packageNamesToInclude = new IncludeSet<>(container.packageNamesToInclude);
-		ExcludeSet<String> packageNamesToExclude = new ExcludeSet<>(container.packageNamesToExclude);
+		PackageNameIncludeSet packageNamesToInclude = new PackageNameIncludeSet(container.packageNamesToInclude);
+		PackageNameExcludeSet packageNamesToExclude = new PackageNameExcludeSet(container.packageNamesToExclude);
 
 		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(packageNamesToInclude,
 				packageNamesToExclude);

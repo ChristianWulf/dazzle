@@ -10,11 +10,11 @@ public class InvalidClassDetector {
 	private final List<InvalidChange<JavaType>> invalidChanges = new ArrayList<>();
 	private final Map<String, JavaType> searchRepository;
 
-	private final IncludeSet<String> packageNamesToInclude;
-	private final ExcludeSet<String> packageNamesToExclude;
+	private final PackageNameIncludeSet packageNamesToInclude;
+	private final PackageNameExcludeSet packageNamesToExclude;
 
-	public InvalidClassDetector(Map<String, JavaType> searchRepository, IncludeSet<String> packageNamesToInclude,
-			ExcludeSet<String> packageNamesToExclude) {
+	public InvalidClassDetector(Map<String, JavaType> searchRepository, PackageNameIncludeSet packageNamesToInclude,
+			PackageNameExcludeSet packageNamesToExclude) {
 		super();
 		this.searchRepository = searchRepository;
 		this.packageNamesToInclude = packageNamesToInclude;
@@ -40,12 +40,12 @@ public class InvalidClassDetector {
 
 	private void compare(JavaType oldType, JavaType currentType) {
 		if (null == currentType) {
-			invalidChanges.add(new InvalidChange<>(oldType, null, InvalidChangeType.TYPE_REMOVED));
+			invalidChanges.add(new InvalidChange<>(oldType.getFqn(), oldType, null, InvalidChangeType.TYPE_REMOVED));
 			return;
 		}
 
 		if (!currentType.isPublic()) {
-			invalidChanges.add(new InvalidChange<>(oldType, currentType, InvalidChangeType.TYPE_VISIBILITY_CHANGED));
+			invalidChanges.add(new InvalidChange<>(oldType.getFqn(), oldType, currentType, InvalidChangeType.TYPE_VISIBILITY_CHANGED));
 			return;
 		}
 	}

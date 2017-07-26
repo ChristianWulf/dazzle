@@ -54,7 +54,9 @@ class AllVisitor extends ClassVisitor implements Visitor {
 	public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
 		if (!currentType.isPublic() || currentType.isDeprecated()) return null;
 
-		JavaMethod javaMethod = new JavaMethod(currentType, access, name, desc);
+		String[] parametersAndReturnType = desc.split("\\)");
+		
+		JavaMethod javaMethod = new JavaMethod(currentType, access, name, parametersAndReturnType[0], parametersAndReturnType[1]);
 		methods.add(javaMethod);
 
 		return null;

@@ -10,12 +10,14 @@ import org.junit.Test;
 
 public class InvalidChangeDetectorTest {
 
+	// These tests are valid for types only. Fields and methods must be commented out.
+	
 	@Test
 	public void testShouldDetectInvalidChangesBetweenVersion1And2WithinAllPackages() throws Exception {
 		URL oldVersionJar = InvalidChangeDetectorTest.class.getResource("/teetime-1.0.jar");
 		URL currentVersionJar = InvalidChangeDetectorTest.class.getResource("/teetime-2.0.jar");
 
-		IncludeSet<String> packageNames = InvalidChangeDetector.ALLOW_ALL_PACKAGES;
+		PackageNameIncludeSet packageNames = InvalidChangeDetector.ALLOW_ALL_PACKAGES;
 		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(packageNames);
 		List<InvalidChange<?>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
 				currentVersionJar);
@@ -28,7 +30,7 @@ public class InvalidChangeDetectorTest {
 		URL oldVersionJar = InvalidChangeDetectorTest.class.getResource("/teetime-2.0.jar");
 		URL currentVersionJar = InvalidChangeDetectorTest.class.getResource("/teetime-2.1.jar");
 
-		IncludeSet<String> packageNames = InvalidChangeDetector.ALLOW_ALL_PACKAGES;
+		PackageNameIncludeSet packageNames = InvalidChangeDetector.ALLOW_ALL_PACKAGES;
 		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(packageNames);
 		List<InvalidChange<?>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
 				currentVersionJar);
@@ -37,12 +39,26 @@ public class InvalidChangeDetectorTest {
 	}
 
 	@Test
-	public void testShouldDetectInvalidChangesWithSinglePackageScope() throws Exception {
+	public void testShouldDetectInvalidChangesWithInclude() throws Exception {
 		URL oldVersionJar = InvalidChangeDetectorTest.class.getResource("/teetime-2.0.jar");
 		URL currentVersionJar = InvalidChangeDetectorTest.class.getResource("/teetime-2.1.jar");
 
-		IncludeSet<String> packageNames = new IncludeSet<>(Arrays.asList("teetime/framework"));
-		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(packageNames);
+		PackageNameIncludeSet includedPackageNames = new PackageNameIncludeSet(Arrays.asList("teetime/framework"));
+		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(includedPackageNames);
+		List<InvalidChange<?>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
+				currentVersionJar);
+
+		assertThat(detectInvalidChanges, hasSize(8));
+	}
+
+	@Test
+	public void testShouldDetectInvalidChangesWithIncludeAndExclude() throws Exception {
+		URL oldVersionJar = InvalidChangeDetectorTest.class.getResource("/teetime-2.0.jar");
+		URL currentVersionJar = InvalidChangeDetectorTest.class.getResource("/teetime-2.1.jar");
+
+		PackageNameIncludeSet includedPackageNames = new PackageNameIncludeSet(Arrays.asList("teetime/framework"));
+		PackageNameExcludeSet excludedPackageNames = new PackageNameExcludeSet(Arrays.asList("teetime/framework/pipe"));
+		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(includedPackageNames, excludedPackageNames);
 		List<InvalidChange<?>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
 				currentVersionJar);
 

@@ -5,13 +5,15 @@ public class JavaMethod implements JavaEntity {
 	private final JavaType owningType;
 	private final int access;
 	private final String name;
+	private final String parameterTypes;
 	private final String returnTypeName;
 
-	public JavaMethod(JavaType owningType, int access, String name, String desc) {
+	public JavaMethod(JavaType owningType, int access, String name, String parameterTypes, String returnTypeName) {
 		this.owningType = owningType;
 		this.access = access;
 		this.name = name;
-		this.returnTypeName = desc;
+		this.parameterTypes = parameterTypes;
+		this.returnTypeName = returnTypeName;
 	}
 
 	public JavaType getOwningType() {
@@ -39,7 +41,7 @@ public class JavaMethod implements JavaEntity {
 		return Access.INSTANCE.isPublic(access);
 	}
 
-	private boolean isProtected() {
+	public boolean isProtected() {
 		return Access.INSTANCE.isProtected(access);
 	}
 
@@ -51,7 +53,7 @@ public class JavaMethod implements JavaEntity {
 	public String toString() {
 		String visibility = (isPublic()) ? "public"
 				: (((isPrivate()) ? "private" : (isProtected()) ? "protected" : ""));
-		return String.format("%s %s %s.%s", visibility, returnTypeName, owningType.getFqn(), name);
+		return String.format("%s %s %s%s", visibility, returnTypeName, name, parameterTypes);
 	}
 
 }

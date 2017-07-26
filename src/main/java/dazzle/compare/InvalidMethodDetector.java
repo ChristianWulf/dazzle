@@ -9,11 +9,11 @@ public class InvalidMethodDetector {
 
 	private final List<InvalidChange<JavaMethod>> invalidChanges = new ArrayList<>();
 	private final Map<String, JavaMethod> searchRepository;
-	private final IncludeSet<String> packageNamesToInclude;
-	private final ExcludeSet<String> packageNamesToExclude;
+	private final PackageNameIncludeSet packageNamesToInclude;
+	private final PackageNameExcludeSet packageNamesToExclude;
 
-	public InvalidMethodDetector(Map<String, JavaMethod> searchRepository, IncludeSet<String> packageNamesToInclude,
-			ExcludeSet<String> packageNamesToExclude) {
+	public InvalidMethodDetector(Map<String, JavaMethod> searchRepository, PackageNameIncludeSet packageNamesToInclude,
+			PackageNameExcludeSet packageNamesToExclude) {
 		super();
 		this.searchRepository = searchRepository;
 		this.packageNamesToInclude = packageNamesToInclude;
@@ -25,34 +25,40 @@ public class InvalidMethodDetector {
 	}
 
 	public void detect(JavaMethod oldMethod) {
+		String packageName = oldMethod.getOwningType().getPackageName();
+		if (!packageNamesToInclude.contains(packageName)) {
+			return;
+		}
+
+		if (packageNamesToExclude.contains(packageName)) {
+			return;
+		}
+
 		JavaMethod currentMethod = searchRepository.get(oldMethod.getKey());
-
-		if (!packageNamesToInclude.contains(oldMethod.getOwningType().getPackageName())) {
-			return;
-		}
-
-		if (packageNamesToExclude.contains(currentMethod.getOwningType().getPackageName())) {
-			return;
-		}
-
 		compare(oldMethod, currentMethod);
 	}
 
 	private void compare(JavaMethod oldMethod, JavaMethod currentMethod) {
-		if (oldMethod.isPublic() && null == currentMethod) {
-			invalidChanges.add(new InvalidChange<>(oldMethod, null, InvalidChangeType.METHOD_REMOVED));
+		boolean isPublicOrProtected = oldMethod.isPublic() || oldMethod.isProtected();
+		boolean isTypePublicOrProtected = oldMethod.getOwningType().isPublic()
+				|| oldMethod.getOwningType().isProtected();
+
+		if (isTypePublicOrProtected && isPublicOrProtected && null == currentMethod) {
+			invalidChanges.add(new InvalidChange<>(oldMethod.getOwningType().getFqn(), oldMethod, null,
+					InvalidChangeType.METHOD_REMOVED));
 			return;
 		}
 
 		if (oldMethod.isPublic() && !currentMethod.isPublic()) {
-			invalidChanges
-					.add(new InvalidChange<>(oldMethod, currentMethod, InvalidChangeType.METHOD_VISIBILITY_CHANGED));
+			invalidChanges.add(new InvalidChange<>(oldMethod.getOwningType().getFqn(), oldMethod, currentMethod,
+					InvalidChangeType.METHOD_VISIBILITY_CHANGED));
 			return;
 		}
 
-		if (oldMethod.isPublic() && !oldMethod.getReturnTypeName().equals(currentMethod.getReturnTypeName())) {
-			invalidChanges
-					.add(new InvalidChange<>(oldMethod, currentMethod, InvalidChangeType.METHOD_RETURNTYPE_CHANGED));
+		if (isTypePublicOrProtected && isPublicOrProtected
+				&& !oldMethod.getReturnTypeName().equals(currentMethod.getReturnTypeName())) {
+			invalidChanges.add(new InvalidChange<>(oldMethod.getOwningType().getFqn(), oldMethod, currentMethod,
+					InvalidChangeType.METHOD_RETURNTYPE_CHANGED));
 			return;
 		}
 

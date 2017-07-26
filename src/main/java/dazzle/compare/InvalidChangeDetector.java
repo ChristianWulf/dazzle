@@ -8,16 +8,17 @@ import dazzle.read.*;
 
 public class InvalidChangeDetector {
 
-	public static final IncludeSet<String> ALLOW_ALL_PACKAGES = new IncludeSet<>(Collections.emptySet());
+	public static final PackageNameIncludeSet ALLOW_ALL_PACKAGES = new PackageNameIncludeSet(Collections.emptySet());
 
-	private final IncludeSet<String> packageNamesToInclude;
-	private final ExcludeSet<String> packageNamesToExclude;
+	private final PackageNameIncludeSet packageNamesToInclude;
+	private final PackageNameExcludeSet packageNamesToExclude;
 
-	public InvalidChangeDetector(IncludeSet<String> packageNamesToInclude) {
-		this(packageNamesToInclude, new ExcludeSet<>(Collections.emptySet()));
+	public InvalidChangeDetector(PackageNameIncludeSet packageNamesToInclude) {
+		this(packageNamesToInclude, new PackageNameExcludeSet(Collections.emptySet()));
 	}
 
-	public InvalidChangeDetector(IncludeSet<String> packageNamesToInclude, ExcludeSet<String> packageNamesToExclude) {
+	public InvalidChangeDetector(PackageNameIncludeSet packageNamesToInclude,
+			PackageNameExcludeSet packageNamesToExclude) {
 		this.packageNamesToInclude = packageNamesToInclude;
 		this.packageNamesToExclude = packageNamesToExclude;
 	}
@@ -49,7 +50,7 @@ public class InvalidChangeDetector {
 		List<InvalidChange<?>> invalidChanges = new ArrayList<>();
 		invalidChanges.addAll(invalidClassDetector.getInvalidChanges());
 		invalidChanges.addAll(invalidFieldDetector.getInvalidChanges());
-		// invalidChanges.addAll(invalidMethodDetector.getInvalidChanges());
+		invalidChanges.addAll(invalidMethodDetector.getInvalidChanges());
 
 		return invalidChanges;
 	}

@@ -8,6 +8,9 @@ public class JavaField implements JavaEntity {
 	private final String typeName;
 
 	public JavaField(JavaType owningType, int access, String name, String desc) {
+		if (null == owningType) { throw new IllegalArgumentException("owningType is null"); }
+		if (null == name) { throw new IllegalArgumentException("name is null"); }
+		if (null == desc) { throw new IllegalArgumentException("desc is null"); }
 		this.owningType = owningType;
 		this.access = access;
 		this.name = name;
@@ -50,7 +53,7 @@ public class JavaField implements JavaEntity {
 	@Override
 	public String toString() {
 		String visibility = (isPublic()) ? "public" : (((isPrivate()) ? "private" : (isProtected()) ? "protected" : ""));
-		return String.format("%s %s %s.%s", visibility, typeName, owningType.getFqn(), name);
+		return String.format("%s %s %s", visibility, typeName, name);
 	}
 
 }
