@@ -10,7 +10,7 @@ public class JavaType implements JavaEntity {
 		this.access = access;
 		this.fqn = name;
 		int endIndex = name.lastIndexOf('/');
-		this.packageName = name.substring(0, endIndex);
+		this.packageName = (endIndex != -1) ? name.substring(0, endIndex) : "";
 	}
 
 	public int getAccess() {
