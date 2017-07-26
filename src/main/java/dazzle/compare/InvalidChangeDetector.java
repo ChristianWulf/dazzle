@@ -37,17 +37,19 @@ public class InvalidChangeDetector {
 		oldVersionVisitor.getTypes().forEach(oldType -> invalidClassDetector.detect(oldType));
 
 		Map<String, JavaField> searchRepositoryField = buildSearchIndex(currentVersionVisitor.getFields());
-		InvalidFieldDetector invalidFieldDetector = new InvalidFieldDetector(searchRepositoryField);
+		InvalidFieldDetector invalidFieldDetector = new InvalidFieldDetector(searchRepositoryField,
+				packageNamesToInclude, packageNamesToExclude);
 		oldVersionVisitor.getFields().forEach(oldField -> invalidFieldDetector.detect(oldField));
 
 		Map<String, JavaMethod> searchRepositoryMethod = buildSearchIndex(currentVersionVisitor.getMethods());
-		InvalidMethodDetector invalidMethodDetector = new InvalidMethodDetector(searchRepositoryMethod);
+		InvalidMethodDetector invalidMethodDetector = new InvalidMethodDetector(searchRepositoryMethod,
+				packageNamesToInclude, packageNamesToExclude);
 		oldVersionVisitor.getMethods().forEach(oldMethod -> invalidMethodDetector.detect(oldMethod));
 
 		List<InvalidChange<?>> invalidChanges = new ArrayList<>();
 		invalidChanges.addAll(invalidClassDetector.getInvalidChanges());
 		invalidChanges.addAll(invalidFieldDetector.getInvalidChanges());
-		invalidChanges.addAll(invalidMethodDetector.getInvalidChanges());
+		// invalidChanges.addAll(invalidMethodDetector.getInvalidChanges());
 
 		return invalidChanges;
 	}

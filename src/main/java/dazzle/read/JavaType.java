@@ -65,8 +65,12 @@ public class JavaType implements JavaEntity {
 	@Override
 	public String toString() {
 		String visibility = (isPublic()) ? "public" : ((isPrivate()) ? "private" : "");
-		String kind = (isEnum()) ? "enum" : ((isInterface()) ? "interface" : "class");
+		String kind = getKind();
 		return String.format("%s %s %s", visibility, kind, fqn);
+	}
+
+	public String getKind() {
+		return (isEnum()) ? "enum" : ((isInterface()) ? "interface" : "class");
 	}
 
 }

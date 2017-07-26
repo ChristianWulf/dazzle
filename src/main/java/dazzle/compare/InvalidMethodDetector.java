@@ -9,10 +9,15 @@ public class InvalidMethodDetector {
 
 	private final List<InvalidChange<JavaMethod>> invalidChanges = new ArrayList<>();
 	private final Map<String, JavaMethod> searchRepository;
+	private final IncludeSet<String> packageNamesToInclude;
+	private final ExcludeSet<String> packageNamesToExclude;
 
-	public InvalidMethodDetector(Map<String, JavaMethod> searchRepository) {
+	public InvalidMethodDetector(Map<String, JavaMethod> searchRepository, IncludeSet<String> packageNamesToInclude,
+			ExcludeSet<String> packageNamesToExclude) {
 		super();
 		this.searchRepository = searchRepository;
+		this.packageNamesToInclude = packageNamesToInclude;
+		this.packageNamesToExclude = packageNamesToExclude;
 	}
 
 	public List<InvalidChange<JavaMethod>> getInvalidChanges() {
@@ -21,6 +26,15 @@ public class InvalidMethodDetector {
 
 	public void detect(JavaMethod oldMethod) {
 		JavaMethod currentMethod = searchRepository.get(oldMethod.getKey());
+
+		if (!packageNamesToInclude.contains(oldMethod.getOwningType().getPackageName())) {
+			return;
+		}
+
+		if (packageNamesToExclude.contains(currentMethod.getOwningType().getPackageName())) {
+			return;
+		}
+
 		compare(oldMethod, currentMethod);
 	}
 
@@ -32,13 +46,13 @@ public class InvalidMethodDetector {
 
 		if (oldMethod.isPublic() && !currentMethod.isPublic()) {
 			invalidChanges
-			.add(new InvalidChange<>(oldMethod, currentMethod, InvalidChangeType.METHOD_VISIBILITY_CHANGED));
+					.add(new InvalidChange<>(oldMethod, currentMethod, InvalidChangeType.METHOD_VISIBILITY_CHANGED));
 			return;
 		}
 
 		if (oldMethod.isPublic() && !oldMethod.getReturnTypeName().equals(currentMethod.getReturnTypeName())) {
 			invalidChanges
-			.add(new InvalidChange<>(oldMethod, currentMethod, InvalidChangeType.METHOD_RETURNTYPE_CHANGED));
+					.add(new InvalidChange<>(oldMethod, currentMethod, InvalidChangeType.METHOD_RETURNTYPE_CHANGED));
 			return;
 		}
 

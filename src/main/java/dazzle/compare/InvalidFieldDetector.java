@@ -9,10 +9,15 @@ public class InvalidFieldDetector {
 
 	private final List<InvalidChange<JavaField>> invalidChanges = new ArrayList<>();
 	private final Map<String, JavaField> searchRepository;
+	private final IncludeSet<String> packageNamesToInclude;
+	private final ExcludeSet<String> packageNamesToExclude;
 
-	public InvalidFieldDetector(Map<String, JavaField> searchRepository) {
+	public InvalidFieldDetector(Map<String, JavaField> searchRepository, IncludeSet<String> packageNamesToInclude,
+			ExcludeSet<String> packageNamesToExclude) {
 		super();
 		this.searchRepository = searchRepository;
+		this.packageNamesToInclude = packageNamesToInclude;
+		this.packageNamesToExclude = packageNamesToExclude;
 	}
 
 	public List<InvalidChange<JavaField>> getInvalidChanges() {
@@ -21,6 +26,15 @@ public class InvalidFieldDetector {
 
 	public void detect(JavaField oldField) {
 		JavaField currentField = searchRepository.get(oldField.getKey());
+
+		if (!packageNamesToInclude.contains(oldField.getOwningType().getPackageName())) {
+			return;
+		}
+
+		if (packageNamesToExclude.contains(currentField.getOwningType().getPackageName())) {
+			return;
+		}
+
 		compare(oldField, currentField);
 	}
 

@@ -49,9 +49,8 @@ public class JavaField implements JavaEntity {
 
 	@Override
 	public String toString() {
-		String visibility = (isPublic()) ? "public"
-				: (((isPrivate()) ? "private" : (isProtected()) ? "protected" : ""));
-		return String.format("%s %s %s", visibility, typeName, name);
+		String visibility = (isPublic()) ? "public" : (((isPrivate()) ? "private" : (isProtected()) ? "protected" : ""));
+		return String.format("%s %s %s.%s", visibility, typeName, owningType.getFqn(), name);
 	}
 
 }
