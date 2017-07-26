@@ -20,6 +20,11 @@ public class InvalidMethodDetector {
 	}
 
 	public void detect(JavaMethod oldMethod) {
+		// TODO if from old type to current type represents an invalid change,
+		// do not additionally consider the members of the type
+		oldMethod.getOwningType();
+
+
 		JavaMethod currentMethod = searchRepository.get(oldMethod.getKey());
 		compare(oldMethod, currentMethod);
 	}

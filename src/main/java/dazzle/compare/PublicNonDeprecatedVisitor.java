@@ -24,6 +24,7 @@ class PublicNonDeprecatedVisitor extends ClassVisitor implements Visitor {
 	@Override
 	public void handleClass(InputStream in) throws IOException {
 		new ClassReader(in).accept(this, 0);
+		// TODO send currentType to output port
 	}
 
 	@Override
