@@ -1,0 +1,63 @@
+# Stop checking for a field or method if the type has already caused an invalid change.
+
+
+# type removed
+type
+without annotation @Deprecated
+removed
+
+
+
+# type visibility changed
+type
+without annotation @Deprecated
+	with visibility public
+	to private, protected, package-private
+
+
+
+# type name changed: covered by "type removed"
+
+
+
+# method removed
+type 
+with visibility public, protected, package-private
+with method 
+	without annotation @Deprecated
+	removed
+
+
+
+# method visibility changed
+type 
+with visibility public, protected, package-private
+with method 
+	without annotation @Deprecated
+		with visibility public
+		to private, protected, package-private
+
+
+
+# method type changed
+type 
+with visibility public, protected, package-private
+with method 
+	without annotation @Deprecated
+		with returntype
+		changed
+
+
+
+# field removed
+type 
+with visibility public, protected, package-private
+with field 
+	without annotation @Deprecated
+	removed
+
+
+	
+# field visibility changed
+
+# field type changed
