@@ -3,6 +3,14 @@
 # ignore internal API changes: how? by annotation, by filter file
 # mark API changes, eg, return type changed: how? deprecated does not fit. by new annotation? 
 
+error: !@Deprecated public type -> removed
+error: !@Deprecated public type -> < type // protected impossible
+error: public type {!@Deprecated [public, protected] * method() -> removed }
+error: public type {!@Deprecated [public, protected] * method() -> < * method() }
+error: public type {!@Deprecated [public, protected] * field -> removed }
+error: public type {!@Deprecated [public, protected] * field -> < * field }
+
+
 # type removed
 type
 without annotation @Deprecated
