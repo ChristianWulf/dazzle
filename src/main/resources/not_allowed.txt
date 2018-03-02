@@ -1,7 +1,7 @@
 # Stop checking for a field or method if the type has already caused an invalid change.
 # ignore folders, e. g., the test folder
 # ignore internal API changes: how? by annotation, by filter file
-# mark API changes: how? deprecated does not fit. by new annotation? 
+# mark API changes, eg, return type changed: how? deprecated does not fit. by new annotation? 
 
 # type removed
 type
