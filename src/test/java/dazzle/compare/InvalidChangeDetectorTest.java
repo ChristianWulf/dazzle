@@ -13,6 +13,7 @@ import dazzle.newcompare.InvalidChange;
 import dazzle.newcompare.InvalidChangeDetector;
 import dazzle.newcompare.PackageNameExcludeSet;
 import dazzle.newcompare.PackageNameIncludeSet;
+import dazzle.newconsole.MainNew;
 import dazzle.read.JavaEntity;
 
 public class InvalidChangeDetectorTest {
@@ -26,6 +27,9 @@ public class InvalidChangeDetectorTest {
 
 		PackageNameIncludeSet packageNames = InvalidChangeDetector.ALLOW_ALL_PACKAGES;
 		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(packageNames);
+		
+		MainNew.addMatchers(invalidChangeDetector);
+		
 		List<InvalidChange<? extends JavaEntity>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
 				currentVersionJar);
 
@@ -39,6 +43,9 @@ public class InvalidChangeDetectorTest {
 
 		PackageNameIncludeSet packageNames = InvalidChangeDetector.ALLOW_ALL_PACKAGES;
 		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(packageNames);
+		
+		MainNew.addMatchers(invalidChangeDetector);
+		
 		List<InvalidChange<? extends JavaEntity>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
 				currentVersionJar);
 
@@ -52,6 +59,9 @@ public class InvalidChangeDetectorTest {
 
 		PackageNameIncludeSet includedPackageNames = new PackageNameIncludeSet(Arrays.asList("teetime/framework"));
 		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(includedPackageNames);
+		
+		MainNew.addMatchers(invalidChangeDetector);
+		
 		List<InvalidChange<? extends JavaEntity>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
 				currentVersionJar);
 
@@ -66,6 +76,9 @@ public class InvalidChangeDetectorTest {
 		PackageNameIncludeSet includedPackageNames = new PackageNameIncludeSet(Arrays.asList("teetime/framework"));
 		PackageNameExcludeSet excludedPackageNames = new PackageNameExcludeSet(Arrays.asList("teetime/framework/pipe"));
 		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(includedPackageNames, excludedPackageNames);
+		
+		MainNew.addMatchers(invalidChangeDetector);
+		
 		List<InvalidChange<? extends JavaEntity>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
 				currentVersionJar);
 

@@ -47,7 +47,7 @@ public class MainNew {
 		return exitCode;
 	}
 
-	private static void addMatchers(InvalidChangeDetector detector) {
+	public static void addMatchers(InvalidChangeDetector detector) {
 		TypeMatch typeMatch;
 		typeMatch = new TypeMatch();
 		typeMatch.setDeprecated(false);
