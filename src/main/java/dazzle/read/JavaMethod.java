@@ -1,5 +1,7 @@
 package dazzle.read;
 
+import dazzle.visitor.Visibility;
+
 public class JavaMethod implements JavaEntity {
 
 	private final JavaType owningType;
@@ -7,6 +9,7 @@ public class JavaMethod implements JavaEntity {
 	private final String name;
 	private final String parameterTypes;
 	private final String returnTypeName;
+	private final Visibility visibility;
 
 	public JavaMethod(JavaType owningType, int access, String name, String parameterTypes, String returnTypeName) {
 		this.owningType = owningType;
@@ -14,6 +17,7 @@ public class JavaMethod implements JavaEntity {
 		this.name = name;
 		this.parameterTypes = parameterTypes;
 		this.returnTypeName = returnTypeName;
+		this.visibility = Visibility.of(access);
 	}
 
 	public JavaType getOwningType() {
@@ -30,6 +34,10 @@ public class JavaMethod implements JavaEntity {
 
 	public String getReturnTypeName() {
 		return returnTypeName;
+	}
+
+	public Visibility getVisibility() {
+		return visibility;
 	}
 
 	@Override

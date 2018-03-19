@@ -1,16 +1,20 @@
 package dazzle.read;
 
+import dazzle.visitor.Visibility;
+
 public class JavaType implements JavaEntity {
 
 	private final int access;
 	private final String fqn;
 	private final String packageName;
+	private final Visibility visibility;
 
 	public JavaType(int access, String name) {
 		this.access = access;
 		this.fqn = name;
 		int endIndex = name.lastIndexOf('/');
 		this.packageName = (endIndex != -1) ? name.substring(0, endIndex) : "";
+		this.visibility = Visibility.of(access);
 	}
 
 	public int getAccess() {
@@ -23,6 +27,10 @@ public class JavaType implements JavaEntity {
 
 	public String getPackageName() {
 		return packageName;
+	}
+
+	public Visibility getVisibility() {
+		return visibility;
 	}
 
 	public boolean isPublic() {

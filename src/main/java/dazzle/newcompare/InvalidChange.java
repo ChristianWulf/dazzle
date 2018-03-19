@@ -1,4 +1,4 @@
-package dazzle.compare;
+package dazzle.newcompare;
 
 public class InvalidChange<T> {
 

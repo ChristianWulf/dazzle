@@ -1,11 +1,14 @@
 package dazzle.read;
 
+import dazzle.visitor.Visibility;
+
 public class JavaField implements JavaEntity {
 
 	private final JavaType owningType;
 	private final int access;
 	private final String name;
 	private final String typeName;
+	private final Visibility visibility;
 
 	public JavaField(JavaType owningType, int access, String name, String desc) {
 		if (null == owningType) { throw new IllegalArgumentException("owningType is null"); }
@@ -15,6 +18,7 @@ public class JavaField implements JavaEntity {
 		this.access = access;
 		this.name = name;
 		this.typeName = desc;
+		this.visibility = Visibility.of(access);
 	}
 
 	public JavaType getOwningType() {
@@ -33,11 +37,16 @@ public class JavaField implements JavaEntity {
 		return typeName;
 	}
 
+	public Visibility getVisibility() {
+		return visibility;
+	}
+
 	@Override
 	public String getKey() {
 		return name;
 	}
 
+	
 	public boolean isPublic() {
 		return Access.INSTANCE.isPublic(access);
 	}

@@ -1,4 +1,4 @@
-package dazzle.console;
+package dazzle.newconsole;
 
 import java.net.*;
 import java.nio.file.Paths;

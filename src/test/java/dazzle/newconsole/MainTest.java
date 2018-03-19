@@ -1,4 +1,4 @@
-package dazzle.console;
+package dazzle.newconsole;
 
 import java.net.URL;
 import java.nio.file.Paths;
@@ -18,7 +18,7 @@ public class MainTest {
 		String currentVersionJarPath = Paths.get(currentVersionResource.toURI()).toString();
 
 		String[] args = { "-o", oldVersionJarPath, "-c", currentVersionJarPath };
-		Main.mainWithoutExitCall(args);
+		MainNew.mainWithoutExitCall(args);
 	}
 
 	@Test
@@ -30,7 +30,7 @@ public class MainTest {
 		String currentVersionJarPath = Paths.get(currentVersionResource.toURI()).toString();
 
 		String[] args = { "-o", oldVersionJarPath, "-c", currentVersionJarPath, "-i", "teetime/framework" };
-		Main.mainWithoutExitCall(args);
+		MainNew.mainWithoutExitCall(args);
 	}
 
 	@Test
@@ -43,7 +43,7 @@ public class MainTest {
 
 		String[] args = { "-o", oldVersionJarPath, "-c", currentVersionJarPath, "-i",
 		"teetime/framework, teetime/stage" };
-		Main.mainWithoutExitCall(args);
+		MainNew.mainWithoutExitCall(args);
 	}
 
 	@Test
@@ -56,7 +56,7 @@ public class MainTest {
 
 		String[] args = { "-o", oldVersionJarPath, "-c", currentVersionJarPath, "-i", "teetime/framework", "-i",
 		"teetime/stage" };
-		Main.mainWithoutExitCall(args);
+		MainNew.mainWithoutExitCall(args);
 	}
 
 }

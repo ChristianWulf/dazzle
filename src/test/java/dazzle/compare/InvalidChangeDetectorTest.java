@@ -4,9 +4,16 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
 
 import java.net.URL;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
 
 import org.junit.Test;
+
+import dazzle.newcompare.InvalidChange;
+import dazzle.newcompare.InvalidChangeDetector;
+import dazzle.newcompare.PackageNameExcludeSet;
+import dazzle.newcompare.PackageNameIncludeSet;
+import dazzle.read.JavaEntity;
 
 public class InvalidChangeDetectorTest {
 
@@ -19,7 +26,7 @@ public class InvalidChangeDetectorTest {
 
 		PackageNameIncludeSet packageNames = InvalidChangeDetector.ALLOW_ALL_PACKAGES;
 		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(packageNames);
-		List<InvalidChange<?>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
+		List<InvalidChange<? extends JavaEntity>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
 				currentVersionJar);
 
 		assertThat(detectInvalidChanges, hasSize(76));
@@ -32,7 +39,7 @@ public class InvalidChangeDetectorTest {
 
 		PackageNameIncludeSet packageNames = InvalidChangeDetector.ALLOW_ALL_PACKAGES;
 		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(packageNames);
-		List<InvalidChange<?>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
+		List<InvalidChange<? extends JavaEntity>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
 				currentVersionJar);
 
 		assertThat(detectInvalidChanges, hasSize(12));
@@ -45,7 +52,7 @@ public class InvalidChangeDetectorTest {
 
 		PackageNameIncludeSet includedPackageNames = new PackageNameIncludeSet(Arrays.asList("teetime/framework"));
 		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(includedPackageNames);
-		List<InvalidChange<?>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
+		List<InvalidChange<? extends JavaEntity>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
 				currentVersionJar);
 
 		assertThat(detectInvalidChanges, hasSize(8));
@@ -59,7 +66,7 @@ public class InvalidChangeDetectorTest {
 		PackageNameIncludeSet includedPackageNames = new PackageNameIncludeSet(Arrays.asList("teetime/framework"));
 		PackageNameExcludeSet excludedPackageNames = new PackageNameExcludeSet(Arrays.asList("teetime/framework/pipe"));
 		InvalidChangeDetector invalidChangeDetector = new InvalidChangeDetector(includedPackageNames, excludedPackageNames);
-		List<InvalidChange<?>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
+		List<InvalidChange<? extends JavaEntity>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
 				currentVersionJar);
 
 		assertThat(detectInvalidChanges, hasSize(4));

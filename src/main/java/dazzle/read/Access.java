@@ -2,7 +2,7 @@ package dazzle.read;
 
 import org.objectweb.asm.Opcodes;
 
-final class Access {
+public final class Access {
 
 	public final static Access INSTANCE = new Access();
 
@@ -40,5 +40,9 @@ final class Access {
 
 	public boolean isDeprecated(int access) {
 		return (access & Opcodes.ACC_DEPRECATED) == Opcodes.ACC_DEPRECATED;
+	}
+
+	public boolean isOpcode(int access, int opCode) {
+		return (access & opCode) == opCode;
 	}
 }
