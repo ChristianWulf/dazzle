@@ -42,7 +42,7 @@ public class JavaMethod implements JavaEntity {
 
 	@Override
 	public String getKey() {
-		return String.format("%s.%s", owningType, name);
+		return String.format("%s.%s(%s)", owningType, name, parameterTypes);
 	}
 
 	public boolean isPublic() {

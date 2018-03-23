@@ -4,7 +4,7 @@ Detects invalid changes from one version to another version of an application.
 For example, an invalid change is a change of a public type, field, or method which has not been marked with the @Deprecated annotation in the version prior to the change.
 
 # Build/Generate the Jar File
-After executing "mvn package", you find the jar-file in the "target" folder.
+After executing "mvn package", you find the jar-file with and without dependencies in the "target" folder.
 
 # General Execution Pattern
 `java -cp 'jar-file' dazzle.console.Main 'oldVersionJarFilePath' 'currentVersionJarFilePath' 'comma separated packageNames'`
