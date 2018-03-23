@@ -49,10 +49,10 @@ public class ExtractEntityVisitor extends ClassVisitor implements Visitor {
 
 	@Override
 	public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-		String[] parametersAndReturnType = desc.split("\\)");
+		String[] parametersAndReturnType = desc.split("[\\(\\)]");
 
-		JavaMethod javaMethod = new JavaMethod(currentType, access, name, parametersAndReturnType[0],
-				parametersAndReturnType[1]);
+		JavaMethod javaMethod = new JavaMethod(currentType, access, name, parametersAndReturnType[1],
+				parametersAndReturnType[2]);
 		methods.put(javaMethod.getKey(), javaMethod);
 
 		return null;

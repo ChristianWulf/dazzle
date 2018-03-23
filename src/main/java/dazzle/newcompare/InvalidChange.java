@@ -2,8 +2,8 @@ package dazzle.newcompare;
 
 public class InvalidChange<T> {
 
-	private final T oldType;
-	private final T currentType;
+	private final T oldElement;
+	private final T currentElement;
 	private final InvalidChangeType invalidChangeType;
 	private String fqn;
 
@@ -13,17 +13,17 @@ public class InvalidChange<T> {
 
 	public InvalidChange(String fqn, T oldElement, T currentElement, InvalidChangeType invalidChangeType) {
 		this.fqn = fqn;
-		this.oldType = oldElement;
-		this.currentType = currentElement;
+		this.oldElement = oldElement;
+		this.currentElement = currentElement;
 		this.invalidChangeType = invalidChangeType;
 	}
 
 	public T getOldElement() {
-		return oldType;
+		return oldElement;
 	}
 
 	public T getCurrentElement() {
-		return currentType;
+		return currentElement;
 	}
 
 	public InvalidChangeType getInvalidChangeType() {
@@ -32,6 +32,6 @@ public class InvalidChange<T> {
 
 	@Override
 	public String toString() {
-		return String.format("%s in %s: from %s to %s", invalidChangeType, fqn, oldType, currentType);
+		return String.format("%s in %s: from %s to %s", invalidChangeType, fqn, oldElement, currentElement);
 	}
 }

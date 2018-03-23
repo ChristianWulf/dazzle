@@ -90,9 +90,9 @@ public class PreviousJarVisitor extends ClassVisitor implements Visitor {
 		if (skipVisitingMembers) return null;
 		
 		for (MethodMatch match : methodMatches) {
-			String[] parametersAndReturnType = desc.split("\\)");
-			String parameterTypes = parametersAndReturnType[0];
-			String returnTypeName = parametersAndReturnType[1];
+			String[] parametersAndReturnType = desc.split("[\\(\\)]");
+			String parameterTypes = parametersAndReturnType[1];
+			String returnTypeName = parametersAndReturnType[2];
 
 			JavaMethod previousMethod = new JavaMethod(lastVisitedType, access, name, parameterTypes, returnTypeName);
 			JavaMethod currentMethod = searchRepository.getMethods().get(previousMethod.getKey());

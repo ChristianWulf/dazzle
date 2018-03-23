@@ -61,7 +61,7 @@ public class JavaMethod implements JavaEntity {
 	public String toString() {
 		String visibility = (isPublic()) ? "public"
 				: (((isPrivate()) ? "private" : (isProtected()) ? "protected" : ""));
-		return String.format("%s %s %s%s", visibility, returnTypeName, name, parameterTypes);
+		return String.format("%s %s %s(%s)", visibility, returnTypeName, name, parameterTypes);
 	}
 
 }
