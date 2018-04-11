@@ -1,5 +1,5 @@
 # dazzle
-Detects invalid changes from one version to another version of an application.
+Detects invalid changes from one version to another version of an application. A similar, but outdated tool is [clirr](http://clirr.sourceforge.net/index.html).
 
 For example, an invalid change is a change of a public type, field, or method which has not been marked with the @Deprecated annotation in the version prior to the change.
 
