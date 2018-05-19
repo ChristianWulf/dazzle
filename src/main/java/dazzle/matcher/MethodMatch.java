@@ -1,4 +1,4 @@
-package dazzle.visitor;
+package dazzle.matcher;
 
 import dazzle.newcompare.InvalidChange;
 import dazzle.newcompare.change.MethodRemovedInvalidChange;

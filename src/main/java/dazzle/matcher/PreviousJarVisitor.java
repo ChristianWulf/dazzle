@@ -1,4 +1,4 @@
-package dazzle.visitor;
+package dazzle.matcher;
 
 import java.io.IOException;
 import java.io.InputStream;

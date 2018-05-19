@@ -1,6 +1,6 @@
 package dazzle.read;
 
-import dazzle.visitor.Visibility;
+import dazzle.matcher.Visibility;
 
 public class JavaType implements JavaEntity {
 

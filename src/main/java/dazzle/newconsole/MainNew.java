@@ -7,14 +7,14 @@ import org.objectweb.asm.Opcodes;
 
 import com.beust.jcommander.JCommander;
 
+import dazzle.matcher.FieldMatch;
+import dazzle.matcher.MethodMatch;
+import dazzle.matcher.TypeMatch;
 import dazzle.newcompare.InvalidChange;
 import dazzle.newcompare.InvalidChangeDetector;
 import dazzle.newcompare.PackageNameExcludeSet;
 import dazzle.newcompare.PackageNameIncludeSet;
 import dazzle.read.JavaEntity;
-import dazzle.visitor.FieldMatch;
-import dazzle.visitor.MethodMatch;
-import dazzle.visitor.TypeMatch;
 
 public class MainNew {
 

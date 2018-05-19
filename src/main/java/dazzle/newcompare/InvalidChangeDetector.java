@@ -6,12 +6,12 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import dazzle.matcher.FieldMatch;
+import dazzle.matcher.MethodMatch;
+import dazzle.matcher.PreviousJarVisitor;
+import dazzle.matcher.TypeMatch;
 import dazzle.read.JavaEntity;
 import dazzle.read.UrlWalker;
-import dazzle.visitor.FieldMatch;
-import dazzle.visitor.MethodMatch;
-import dazzle.visitor.PreviousJarVisitor;
-import dazzle.visitor.TypeMatch;
 
 public class InvalidChangeDetector {
 
