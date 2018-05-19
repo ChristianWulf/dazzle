@@ -22,4 +22,9 @@ public enum Visibility {
 		}
 	}
 
+	@Override
+	public String toString() {
+		return super.toString().toLowerCase();
+	}
+
 }

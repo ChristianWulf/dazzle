@@ -11,9 +11,15 @@ public class JavaField implements JavaEntity {
 	private final Visibility visibility;
 
 	public JavaField(JavaType owningType, int access, String name, String desc) {
-		if (null == owningType) { throw new IllegalArgumentException("owningType is null"); }
-		if (null == name) { throw new IllegalArgumentException("name is null"); }
-		if (null == desc) { throw new IllegalArgumentException("desc is null"); }
+		if (null == owningType) {
+			throw new IllegalArgumentException("owningType is null");
+		}
+		if (null == name) {
+			throw new IllegalArgumentException("name is null");
+		}
+		if (null == desc) {
+			throw new IllegalArgumentException("desc is null");
+		}
 		this.owningType = owningType;
 		this.access = access;
 		this.name = name;
@@ -43,10 +49,9 @@ public class JavaField implements JavaEntity {
 
 	@Override
 	public String getKey() {
-		return name;
+		return String.format("%s.%s", owningType.getFqn(), name);
 	}
 
-	
 	public boolean isPublic() {
 		return Access.INSTANCE.isPublic(access);
 	}
@@ -61,7 +66,6 @@ public class JavaField implements JavaEntity {
 
 	@Override
 	public String toString() {
-		String visibility = (isPublic()) ? "public" : (((isPrivate()) ? "private" : (isProtected()) ? "protected" : ""));
 		return String.format("%s %s %s", visibility, typeName, name);
 	}
 

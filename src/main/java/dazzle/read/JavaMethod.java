@@ -42,7 +42,7 @@ public class JavaMethod implements JavaEntity {
 
 	@Override
 	public String getKey() {
-		return String.format("%s.%s(%s)", owningType, name, parameterTypes);
+		return String.format("%s.%s(%s)", owningType.getFqn(), name, parameterTypes);
 	}
 
 	public boolean isPublic() {
@@ -53,14 +53,8 @@ public class JavaMethod implements JavaEntity {
 		return Access.INSTANCE.isProtected(access);
 	}
 
-	private boolean isPrivate() {
-		return Access.INSTANCE.isPrivate(access);
-	}
-
 	@Override
 	public String toString() {
-		String visibility = (isPublic()) ? "public"
-				: (((isPrivate()) ? "private" : (isProtected()) ? "protected" : ""));
 		return String.format("%s %s %s(%s)", visibility, returnTypeName, name, parameterTypes);
 	}
 

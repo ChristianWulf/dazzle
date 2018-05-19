@@ -1,18 +1,22 @@
 package dazzle.visitor;
 
 import dazzle.newcompare.InvalidChange;
-import dazzle.newcompare.InvalidChange.InvalidChangeType;
+import dazzle.newcompare.change.MethodRemovedInvalidChange;
+import dazzle.newcompare.change.MethodVisibilityInvalidChange;
 import dazzle.read.Access;
 import dazzle.read.JavaMethod;
 
 public class MethodMatch {
 
+	// method's parent
 	private int visibility;
 	private boolean deprecated;
-	private boolean compareMethodReducedVisibility;
+	// method
 	private boolean methodDeprecated;
-	private boolean compareMethodRemoved;
 	private int methodVisibility;
+	// compare flags
+	private boolean compareMethodReducedVisibility;
+	private boolean compareMethodRemoved;
 
 	public void setVisibility(int visibility) {
 		this.visibility = visibility;
@@ -33,7 +37,7 @@ public class MethodMatch {
 	public void setMethodDeprecated(boolean methodDeprecated) {
 		this.methodDeprecated = methodDeprecated;
 	}
-	
+
 	public void setMethodVisibility(int methodVisibility) {
 		this.methodVisibility = methodVisibility;
 	}
@@ -64,8 +68,7 @@ public class MethodMatch {
 		if (currentMethod == null) {
 			if (compareMethodRemoved) {
 				// violation
-				return new InvalidChange<JavaMethod>(lastVisitedMethod.getKey(), lastVisitedMethod, currentMethod,
-						InvalidChangeType.METHOD_REMOVED);
+				return new MethodRemovedInvalidChange(lastVisitedMethod.getKey(), lastVisitedMethod, currentMethod);
 			} else {
 				return null;
 			}
@@ -75,8 +78,7 @@ public class MethodMatch {
 		if (compareMethodReducedVisibility
 				&& lastVisitedMethod.getVisibility().compareTo(currentMethod.getVisibility()) > 0) {
 			// violation
-			return new InvalidChange<JavaMethod>(lastVisitedMethod.getKey(), lastVisitedMethod, currentMethod,
-					InvalidChangeType.METHOD_VISIBILITY_CHANGED);
+			return new MethodVisibilityInvalidChange(lastVisitedMethod.getKey(), lastVisitedMethod, currentMethod);
 		}
 
 		return null;

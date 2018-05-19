@@ -82,6 +82,8 @@ public class InvalidChangeDetectorTest {
 		List<InvalidChange<? extends JavaEntity>> detectInvalidChanges = invalidChangeDetector.detectInvalidChanges(oldVersionJar,
 				currentVersionJar);
 
+		detectInvalidChanges.forEach(System.out::println);
+		
 		assertThat(detectInvalidChanges, hasSize(4));
 	}
 }

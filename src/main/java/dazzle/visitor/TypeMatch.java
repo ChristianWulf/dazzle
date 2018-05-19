@@ -1,7 +1,8 @@
 package dazzle.visitor;
 
 import dazzle.newcompare.InvalidChange;
-import dazzle.newcompare.InvalidChange.InvalidChangeType;
+import dazzle.newcompare.change.TypeRemovedInvalidChange;
+import dazzle.newcompare.change.TypeVisibilityInvalidChange;
 import dazzle.read.Access;
 import dazzle.read.JavaType;
 
@@ -41,15 +42,13 @@ public class TypeMatch {
 
 		if (compareRemoved && currentType == null) {
 			// violation
-			return new InvalidChange<JavaType>(lastVisitedType.getFqn(), lastVisitedType, currentType,
-					InvalidChangeType.TYPE_REMOVED);
+			return new TypeRemovedInvalidChange(lastVisitedType.getFqn(), lastVisitedType, currentType);
 		}
 
 		// lastVisitedType.getVisibility() > currentType.getVisibility()
 		if (compareReducedVisibility && lastVisitedType.getVisibility().compareTo(currentType.getVisibility()) > 0) {
 			// violation
-			return new InvalidChange<JavaType>(lastVisitedType.getFqn(), lastVisitedType, currentType,
-					InvalidChangeType.TYPE_VISIBILITY_CHANGED);
+			return new TypeVisibilityInvalidChange(lastVisitedType.getFqn(), lastVisitedType, currentType);
 		}
 
 		return null;

@@ -34,14 +34,11 @@ public class MainNew {
 		InvalidChangeDetector detector = new InvalidChangeDetector(packageNamesToInclude, packageNamesToExclude);
 
 		addMatchers(detector);
-		
+
 		List<InvalidChange<? extends JavaEntity>> invalidChanges;
 		invalidChanges = detector.detectInvalidChanges(container.oldVersionJar, container.currentVersionJar);
 
-		for (InvalidChange<?> invalidChange : invalidChanges) {
-			// TODO consider to use slf4j
-			System.out.println(invalidChange);
-		}
+		invalidChanges.forEach(System.out::println);
 
 		int exitCode = invalidChanges.size();
 		return exitCode;
@@ -63,11 +60,41 @@ public class MainNew {
 		typeMatch.setCompareReducedVisibility(true);
 		detector.getTypeMatches().add(typeMatch);
 
-		FieldMatch fieldMatch = new FieldMatch();
-		// fieldMatch.setDeprecated(false);
-		// fieldMatch.setVisibility(Opcodes.ACC_PUBLIC);
-		// fieldMatch.setCompareRemoved(true);
-		// fieldMatch.setCompareReducedVisibility(false);
+		FieldMatch fieldMatch;
+		fieldMatch = new FieldMatch();
+		fieldMatch.setDeprecated(false);
+		fieldMatch.setVisibility(Opcodes.ACC_PUBLIC);
+		fieldMatch.setFieldDeprecated(false);
+		fieldMatch.setFieldVisibility(Opcodes.ACC_PUBLIC);
+		fieldMatch.setCompareFieldRemoved(true);
+		fieldMatch.setCompareFieldReducedVisibility(false);
+		detector.getFieldMatches().add(fieldMatch);
+
+		fieldMatch = new FieldMatch();
+		fieldMatch.setDeprecated(false);
+		fieldMatch.setVisibility(Opcodes.ACC_PUBLIC);
+		fieldMatch.setFieldDeprecated(false);
+		fieldMatch.setFieldVisibility(Opcodes.ACC_PUBLIC);
+		fieldMatch.setCompareFieldRemoved(false);
+		fieldMatch.setCompareFieldReducedVisibility(true);
+		detector.getFieldMatches().add(fieldMatch);
+
+		fieldMatch = new FieldMatch();
+		fieldMatch.setDeprecated(false);
+		fieldMatch.setVisibility(Opcodes.ACC_PUBLIC);
+		fieldMatch.setFieldDeprecated(false);
+		fieldMatch.setFieldVisibility(Opcodes.ACC_PROTECTED);
+		fieldMatch.setCompareFieldRemoved(true);
+		fieldMatch.setCompareFieldReducedVisibility(false);
+		detector.getFieldMatches().add(fieldMatch);
+
+		fieldMatch = new FieldMatch();
+		fieldMatch.setDeprecated(false);
+		fieldMatch.setVisibility(Opcodes.ACC_PUBLIC);
+		fieldMatch.setFieldDeprecated(false);
+		fieldMatch.setFieldVisibility(Opcodes.ACC_PROTECTED);
+		fieldMatch.setCompareFieldRemoved(false);
+		fieldMatch.setCompareFieldReducedVisibility(true);
 		detector.getFieldMatches().add(fieldMatch);
 
 		MethodMatch methodMatch;

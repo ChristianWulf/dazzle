@@ -72,7 +72,7 @@ public class JavaType implements JavaEntity {
 
 	@Override
 	public String toString() {
-		String visibility = (isPublic()) ? "public" : ((isPrivate()) ? "private" : "");
+//		String visibility = (isPublic()) ? "public" : ((isPrivate()) ? "private" : "");
 		String kind = getKind();
 		return String.format("%s %s %s", visibility, kind, fqn);
 	}
