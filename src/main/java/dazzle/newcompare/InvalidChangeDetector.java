@@ -42,6 +42,8 @@ public class InvalidChangeDetector {
 		urlWalker.visitJar(currentVersionJar);
 
 		PreviousJarVisitor oldVersionVisitor = new PreviousJarVisitor(currentVersionVisitor);
+		oldVersionVisitor.setPackageNamesToInclude(packageNamesToInclude);
+		oldVersionVisitor.setPackageNamesToExclude(packageNamesToExclude);
 		oldVersionVisitor.getTypeMatches().addAll(typeMatches);
 		oldVersionVisitor.getFieldMatches().addAll(fieldMatches);
 		oldVersionVisitor.getMethodMatches().addAll(methodMatches);

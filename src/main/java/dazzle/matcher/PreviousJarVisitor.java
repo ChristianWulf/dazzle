@@ -13,6 +13,8 @@ import org.objectweb.asm.Opcodes;
 
 import dazzle.newcompare.ExtractEntityVisitor;
 import dazzle.newcompare.InvalidChange;
+import dazzle.newcompare.PackageNameExcludeSet;
+import dazzle.newcompare.PackageNameIncludeSet;
 import dazzle.read.JavaEntity;
 import dazzle.read.JavaField;
 import dazzle.read.JavaMethod;
@@ -20,6 +22,9 @@ import dazzle.read.JavaType;
 import dazzle.read.Visitor;
 
 public class PreviousJarVisitor extends ClassVisitor implements Visitor {
+
+	private PackageNameIncludeSet packageNamesToInclude;
+	private PackageNameExcludeSet packageNamesToExclude;
 
 	// available matches
 	private final List<TypeMatch> typeMatches = new ArrayList<>();
@@ -38,6 +43,14 @@ public class PreviousJarVisitor extends ClassVisitor implements Visitor {
 		this.searchRepository = searchRepository;
 	}
 
+	public void setPackageNamesToInclude(PackageNameIncludeSet packageNamesToInclude) {
+		this.packageNamesToInclude = packageNamesToInclude;
+	}
+
+	public void setPackageNamesToExclude(PackageNameExcludeSet packageNamesToExclude) {
+		this.packageNamesToExclude = packageNamesToExclude;
+	}
+
 	@Override
 	public void handleClass(InputStream in) throws IOException {
 		new ClassReader(in).accept(this, 0);
@@ -51,6 +64,12 @@ public class PreviousJarVisitor extends ClassVisitor implements Visitor {
 	public void visit(int version, int access, String name, String signature, String superName, String[] interfaces) {
 		skipVisitingMembers = false;
 		lastVisitedType = new JavaType(access, name);
+
+		if (!packageNamesToInclude.contains(lastVisitedType.getPackageName())) {
+			return;
+		} else if (packageNamesToExclude.contains(lastVisitedType.getPackageName())) {
+			return;
+		}
 
 		for (TypeMatch match : typeMatches) {
 			JavaType currentType = searchRepository.getTypes().get(lastVisitedType.getKey());
@@ -69,8 +88,15 @@ public class PreviousJarVisitor extends ClassVisitor implements Visitor {
 
 	@Override
 	public FieldVisitor visitField(int access, String name, String desc, String signature, Object value) {
-		if (skipVisitingMembers) return null;
-		
+		if (skipVisitingMembers)
+			return null;
+
+		if (!packageNamesToInclude.contains(lastVisitedType.getPackageName())) {
+			return null;
+		} else if (packageNamesToExclude.contains(lastVisitedType.getPackageName())) {
+			return null;
+		}
+
 		for (FieldMatch match : fieldMatches) {
 			JavaField previousField = new JavaField(lastVisitedType, access, name, desc);
 			JavaField currentField = searchRepository.getFields().get(previousField.getKey());
@@ -87,8 +113,15 @@ public class PreviousJarVisitor extends ClassVisitor implements Visitor {
 
 	@Override
 	public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
-		if (skipVisitingMembers) return null;
-		
+		if (skipVisitingMembers)
+			return null;
+
+		if (!packageNamesToInclude.contains(lastVisitedType.getPackageName())) {
+			return null;
+		} else if (packageNamesToExclude.contains(lastVisitedType.getPackageName())) {
+			return null;
+		}
+
 		for (MethodMatch match : methodMatches) {
 			String[] parametersAndReturnType = desc.split("[\\(\\)]");
 			String parameterTypes = parametersAndReturnType[1];
@@ -109,7 +142,12 @@ public class PreviousJarVisitor extends ClassVisitor implements Visitor {
 
 	@Override
 	public void visitInnerClass(String name, String outerName, String innerName, int access) {
-		if (skipVisitingMembers) return;
+		if (skipVisitingMembers)
+			return;
+
+		if (!packageNamesToInclude.contains(lastVisitedType.getPackageName())) {
+			return;
+		}
 
 		// TODO Auto-generated method stub
 		super.visitInnerClass(name, outerName, innerName, access);
