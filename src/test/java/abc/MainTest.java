@@ -24,6 +24,7 @@ public class MainTest {
 		// 74 = TypeRemovedRule
 		// 02 = TypeVisibilityReducedRule
 		// 49 = MethodRemovedRule
-		assertThat(numInvalidChanges, is(74 + 02 + 49));
+		// 02 = FieldRemovedRule
+		assertThat(numInvalidChanges, is(74 + 02 + 49 + 02));
 	}
 }

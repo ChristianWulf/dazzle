@@ -6,6 +6,7 @@ public class JavaField implements JavaEntity {
 
 	private final JavaType owningType;
 	private final int access;
+	private final String fqn;
 	private final String name;
 	private final String typeName;
 	private final Visibility visibility;
@@ -22,6 +23,7 @@ public class JavaField implements JavaEntity {
 		}
 		this.owningType = owningType;
 		this.access = access;
+		this.fqn = String.format("%s.%s", owningType.getFqn(), name);
 		this.name = name;
 		this.typeName = desc;
 		this.visibility = Visibility.of(access);
@@ -33,6 +35,10 @@ public class JavaField implements JavaEntity {
 
 	public int getAccess() {
 		return access;
+	}
+
+	public String getFqn() {
+		return fqn;
 	}
 
 	public String getName() {
@@ -62,6 +68,10 @@ public class JavaField implements JavaEntity {
 
 	public boolean isPrivate() {
 		return Access.INSTANCE.isPrivate(access);
+	}
+
+	public boolean isDeprecated() {
+		return Access.INSTANCE.isDeprecated(access);
 	}
 
 	@Override

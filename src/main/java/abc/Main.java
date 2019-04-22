@@ -71,7 +71,7 @@ public class Main {
 
 	private static List<AbcRule> readRulesFromConfig(CurrentJarInventory currentJarInventory)
 			throws URISyntaxException, IOException {
-		URL resource = Main.class.getResource("/rules.properties");
+		URL resource = Main.class.getResource("/rules.properties");	// TODO set as cli parameter with default value /rules.properties 
 		Path path = Paths.get(resource.toURI());
 		List<String> lines = Files.readAllLines(path);
 
@@ -79,8 +79,12 @@ public class Main {
 
 		AbcClassLoader<AbcRule> classLoader = new AbcClassLoader<>();
 		lines.forEach(line -> {
-			if (line.matches("\\s*#\\s*.*"))
+			if (line.matches("\\s*#\\s*.*")) { // comment line
 				return;
+			}
+			if (line.matches("\\s*")) { // empty line
+				return;
+			}
 			AbcRule rule = classLoader.load(line);
 			rule.setCurrentJarInventory(currentJarInventory);
 			rules.add(rule);
