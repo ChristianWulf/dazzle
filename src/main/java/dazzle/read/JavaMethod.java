@@ -6,6 +6,7 @@ public class JavaMethod implements JavaEntity {
 
 	private final JavaType owningType;
 	private final int access;
+	private final String fqn;
 	private final String name;
 	private final String parameterTypes;
 	private final String returnTypeName;
@@ -15,6 +16,7 @@ public class JavaMethod implements JavaEntity {
 	public JavaMethod(JavaType owningType, int access, String name, String parameterTypes, String returnTypeName) {
 		this.owningType = owningType;
 		this.access = access;
+		this.fqn = name.replaceAll("/", ".");
 		this.name = name;
 		this.parameterTypes = parameterTypes;
 		this.returnTypeName = returnTypeName;
@@ -28,6 +30,7 @@ public class JavaMethod implements JavaEntity {
 
 		this.owningType = owningType;
 		this.access = access;
+		this.fqn = String.format("%s.%s(%s)", owningType.getFqn(), name, parameterTypes);
 		this.name = name;
 		this.parameterTypes = parameterTypes;
 		this.returnTypeName = returnTypeName;
@@ -40,6 +43,10 @@ public class JavaMethod implements JavaEntity {
 
 	public int getAccess() {
 		return access;
+	}
+
+	public String getFqn() {
+		return fqn;
 	}
 
 	public String getName() {
@@ -65,6 +72,10 @@ public class JavaMethod implements JavaEntity {
 
 	public boolean isProtected() {
 		return Access.INSTANCE.isProtected(access);
+	}
+
+	public boolean isDeprecated() {
+		return Access.INSTANCE.isDeprecated(access);
 	}
 
 	@Override

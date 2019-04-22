@@ -21,6 +21,9 @@ public class MainTest {
 		String[] args = { "-o", oldVersionJarPath, "-c", currentVersionJarPath };
 		int numInvalidChanges = Main.mainWithoutExitCall(args);
 
-		assertThat(numInvalidChanges, is(74));
+		// 74 = TypeRemovedRule
+		// 02 = TypeVisibilityReducedRule
+		// 49 = MethodRemovedRule
+		assertThat(numInvalidChanges, is(74 + 02 + 49));
 	}
 }
