@@ -1,6 +1,5 @@
 package abc.crawler;
 
-import abc.matcher.InvalidChange;
 import dazzle.read.JavaField;
 import dazzle.read.JavaMethod;
 import dazzle.read.JavaType;

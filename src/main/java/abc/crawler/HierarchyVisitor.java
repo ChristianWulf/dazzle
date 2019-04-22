@@ -1,4 +1,4 @@
-package abc;
+package abc.crawler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +8,6 @@ import org.objectweb.asm.FieldVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
-import abc.crawler.AbcRule;
-import abc.matcher.InvalidChange;
 import dazzle.read.JavaField;
 import dazzle.read.JavaMethod;
 import dazzle.read.JavaType;

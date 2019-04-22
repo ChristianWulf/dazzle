@@ -11,12 +11,12 @@ import java.util.List;
 
 import com.beust.jcommander.JCommander;
 
-import abc.crawler.AbcClassLoader;
 import abc.crawler.AbcRule;
 import abc.crawler.CurrentJarInventory;
 import abc.crawler.CurrentJarInventoryBuilder;
+import abc.crawler.HierarchyVisitor;
+import abc.crawler.InvalidChange;
 import abc.crawler.JarCrawler;
-import abc.matcher.InvalidChange;
 
 public class Main {
 

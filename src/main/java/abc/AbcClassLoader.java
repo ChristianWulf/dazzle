@@ -1,6 +1,6 @@
-package abc.crawler;
+package abc;
 
-public class AbcClassLoader<T> {
+class AbcClassLoader<T> {
 
 	@SuppressWarnings("unchecked")
 	public T load(String fullyQualifiedClassName) {
@@ -12,7 +12,7 @@ public class AbcClassLoader<T> {
 		} catch (ClassNotFoundException e) {
 			throw new IllegalArgumentException(fullyQualifiedClassName);
 		}
-		
+
 		// TODO asSubclass?
 
 		try {
