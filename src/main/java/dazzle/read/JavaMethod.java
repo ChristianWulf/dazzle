@@ -11,7 +11,21 @@ public class JavaMethod implements JavaEntity {
 	private final String returnTypeName;
 	private final Visibility visibility;
 
+	@Deprecated
 	public JavaMethod(JavaType owningType, int access, String name, String parameterTypes, String returnTypeName) {
+		this.owningType = owningType;
+		this.access = access;
+		this.name = name;
+		this.parameterTypes = parameterTypes;
+		this.returnTypeName = returnTypeName;
+		this.visibility = Visibility.of(access);
+	}
+
+	public JavaMethod(JavaType owningType, int access, String name, String desc) {
+		String[] parametersAndReturnType = desc.split("[\\(\\)]");
+		String parameterTypes = parametersAndReturnType[1];
+		String returnTypeName = parametersAndReturnType[2];
+
 		this.owningType = owningType;
 		this.access = access;
 		this.name = name;

@@ -1,12 +1,10 @@
 package abc.crawler;
 
-import abc.Main;
-
 public class AbcClassLoader<T> {
 
 	@SuppressWarnings("unchecked")
 	public T load(String fullyQualifiedClassName) {
-		ClassLoader classLoader = Main.class.getClassLoader();
+		ClassLoader classLoader = this.getClass().getClassLoader();
 
 		Class<T> clazz;
 		try {

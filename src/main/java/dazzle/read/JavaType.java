@@ -11,7 +11,7 @@ public class JavaType implements JavaEntity {
 
 	public JavaType(int access, String name) {
 		this.access = access;
-		this.fqn = name;
+		this.fqn = name.replaceAll("/", ".");
 		int endIndex = name.lastIndexOf('/');
 		this.packageName = (endIndex != -1) ? name.substring(0, endIndex) : "";
 		this.visibility = Visibility.of(access);

@@ -9,8 +9,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.objectweb.asm.ClassVisitor;
-
 import com.beust.jcommander.JCommander;
 
 import abc.crawler.AbcClassLoader;
@@ -19,7 +17,6 @@ import abc.crawler.CurrentJarInventory;
 import abc.crawler.CurrentJarInventoryBuilder;
 import abc.crawler.JarCrawler;
 import abc.matcher.InvalidChange;
-import dazzle.read.JavaEntity;
 
 public class Main {
 
@@ -32,7 +29,9 @@ public class Main {
 	public static int mainWithoutExitCall(String[] args) throws IOException {
 		CommandLineArgsContainer container = extractCommandLineArguments(args);
 
-		List<InvalidChange<? extends JavaEntity>> invalidChanges = detectInvalidChanges(container);
+		List<InvalidChange<?>> invalidChanges = detectInvalidChanges(container);
+
+		invalidChanges.forEach(ic -> System.out.println(ic.getMessage()));
 
 		int exitCode = invalidChanges.size();
 		return exitCode;
@@ -44,10 +43,7 @@ public class Main {
 		return container;
 	}
 
-	private static List<InvalidChange<? extends JavaEntity>> detectInvalidChanges(CommandLineArgsContainer container)
-			throws IOException {
-		List<InvalidChange<? extends JavaEntity>> invalidChanges = new ArrayList<>();
-
+	private static List<InvalidChange<?>> detectInvalidChanges(CommandLineArgsContainer container) throws IOException {
 		CurrentJarInventoryBuilder currentJarInventoryVisitor = new CurrentJarInventoryBuilder();
 
 		// crawl the new jar to build up the current jar inventory
@@ -55,7 +51,7 @@ public class Main {
 		newJarCrawler.visitJar(container.currentVersionJar, currentJarInventoryVisitor);
 
 		// import all available rule
-		List<ClassVisitor> rules;
+		List<AbcRule> rules;
 		try {
 			rules = readRulesFromConfig(currentJarInventoryVisitor.getCurrentJarInventory());
 		} catch (URISyntaxException e) {
@@ -70,20 +66,21 @@ public class Main {
 		JarCrawler oldJarCrawler = new JarCrawler();
 		oldJarCrawler.visitJar(container.oldVersionJar, visitor);
 
-		// TODO Auto-generated method stub
-		return invalidChanges;
+		return visitor.getInvalidChanges();
 	}
 
-	private static List<ClassVisitor> readRulesFromConfig(CurrentJarInventory currentJarInventory)
+	private static List<AbcRule> readRulesFromConfig(CurrentJarInventory currentJarInventory)
 			throws URISyntaxException, IOException {
 		URL resource = Main.class.getResource("/rules.properties");
 		Path path = Paths.get(resource.toURI());
 		List<String> lines = Files.readAllLines(path);
 
-		List<ClassVisitor> rules = new ArrayList<>();
+		List<AbcRule> rules = new ArrayList<>();
 
 		AbcClassLoader<AbcRule> classLoader = new AbcClassLoader<>();
 		lines.forEach(line -> {
+			if (line.matches("\\s*#\\s*.*"))
+				return;
 			AbcRule rule = classLoader.load(line);
 			rule.setCurrentJarInventory(currentJarInventory);
 			rules.add(rule);
