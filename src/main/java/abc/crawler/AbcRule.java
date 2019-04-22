@@ -1,8 +1,8 @@
 package abc.crawler;
 
-import dazzle.read.JavaField;
-import dazzle.read.JavaMethod;
-import dazzle.read.JavaType;
+import abc.java.JavaField;
+import abc.java.JavaMethod;
+import abc.java.JavaType;
 
 public abstract class AbcRule {
 

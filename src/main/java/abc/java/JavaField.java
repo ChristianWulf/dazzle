@@ -1,4 +1,4 @@
-package dazzle.read;
+package abc.java;
 
 public class JavaField implements JavaEntity {
 

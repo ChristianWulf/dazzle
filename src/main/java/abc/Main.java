@@ -53,7 +53,7 @@ public class Main {
 		// import all available rule
 		List<AbcRule> rules;
 		try {
-			rules = readRulesFromConfig(currentJarInventoryVisitor.getCurrentJarInventory());
+			rules = readRulesFromConfig(currentJarInventoryVisitor.getCurrentJarInventory(), container.rulesFiles);
 		} catch (URISyntaxException e) {
 			throw new IllegalStateException(e);
 		}
@@ -69,10 +69,9 @@ public class Main {
 		return visitor.getInvalidChanges();
 	}
 
-	private static List<AbcRule> readRulesFromConfig(CurrentJarInventory currentJarInventory)
+	private static List<AbcRule> readRulesFromConfig(CurrentJarInventory currentJarInventory, URL rulesFileLocation)
 			throws URISyntaxException, IOException {
-		URL resource = Main.class.getResource("/rules.properties");	// TODO set as cli parameter with default value /rules.properties 
-		Path path = Paths.get(resource.toURI());
+		Path path = Paths.get(rulesFileLocation.toURI());
 		List<String> lines = Files.readAllLines(path);
 
 		List<AbcRule> rules = new ArrayList<>();

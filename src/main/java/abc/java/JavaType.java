@@ -1,4 +1,4 @@
-package dazzle.read;
+package abc.java;
 
 public class JavaType implements JavaEntity {
 

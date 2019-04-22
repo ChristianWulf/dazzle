@@ -2,9 +2,9 @@ package abc.crawler;
 
 import java.util.Map;
 
-import dazzle.read.JavaField;
-import dazzle.read.JavaMethod;
-import dazzle.read.JavaType;
+import abc.java.JavaField;
+import abc.java.JavaMethod;
+import abc.java.JavaType;
 
 public interface CurrentJarInventory {
 

@@ -1,4 +1,4 @@
-package dazzle.read;
+package abc.java;
 
 import org.objectweb.asm.Opcodes;
 

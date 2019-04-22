@@ -1,6 +1,6 @@
 package abc.crawler;
 
-import dazzle.read.JavaEntity;
+import abc.java.JavaEntity;
 
 public class InvalidChange<T extends JavaEntity> {
 

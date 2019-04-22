@@ -2,9 +2,9 @@ package abc.rules;
 
 import abc.crawler.AbcRule;
 import abc.crawler.InvalidChange;
-import dazzle.read.JavaField;
-import dazzle.read.JavaMethod;
-import dazzle.read.JavaType;
+import abc.java.JavaField;
+import abc.java.JavaMethod;
+import abc.java.JavaType;
 
 public class TypeRemovedRule extends AbcRule {
 

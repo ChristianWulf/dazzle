@@ -18,7 +18,8 @@ public class MainTest {
 		URL currentVersionResource = MainTest.class.getResource("/teetime-2.0.jar");
 		String currentVersionJarPath = Paths.get(currentVersionResource.toURI()).toString();
 
-		String[] args = { "-o", oldVersionJarPath, "-c", currentVersionJarPath };
+		String rulesFile = Paths.get(MainTest.class.getResource("/rules-test.properties").toURI()).toString();
+		String[] args = { "-o", oldVersionJarPath, "-c", currentVersionJarPath, "-r", rulesFile };
 		int numInvalidChanges = Main.mainWithoutExitCall(args);
 
 		// 74 = TypeRemovedRule
