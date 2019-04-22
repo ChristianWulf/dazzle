@@ -1,7 +1,5 @@
 package dazzle.read;
 
-import dazzle.matcher.Visibility;
-
 public class JavaType implements JavaEntity {
 
 	private final int access;

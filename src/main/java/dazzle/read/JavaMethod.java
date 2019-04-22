@@ -1,7 +1,5 @@
 package dazzle.read;
 
-import dazzle.matcher.Visibility;
-
 public class JavaMethod implements JavaEntity {
 
 	private final JavaType owningType;

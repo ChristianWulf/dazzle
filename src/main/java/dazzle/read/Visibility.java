@@ -1,4 +1,4 @@
-package dazzle.matcher;
+package dazzle.read;
 
 import org.objectweb.asm.Opcodes;
 

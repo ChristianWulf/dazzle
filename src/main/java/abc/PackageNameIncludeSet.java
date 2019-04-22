@@ -1,4 +1,4 @@
-package dazzle.newcompare;
+package abc;
 
 import java.util.*;
 

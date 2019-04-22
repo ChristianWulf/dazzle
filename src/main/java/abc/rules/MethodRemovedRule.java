@@ -2,10 +2,10 @@ package abc.rules;
 
 import abc.crawler.AbcRule;
 import abc.matcher.InvalidChange;
-import dazzle.matcher.Visibility;
 import dazzle.read.JavaField;
 import dazzle.read.JavaMethod;
 import dazzle.read.JavaType;
+import dazzle.read.Visibility;
 
 public class MethodRemovedRule extends AbcRule {
 
